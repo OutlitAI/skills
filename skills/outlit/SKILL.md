@@ -1,6 +1,6 @@
 ---
 name: outlit
-description: Use when accessing Outlit customer intelligence through the `outlit` CLI, Outlit MCP tools, Pi tools, or @outlit/tools, including customer lookups, users, workspace users, timelines, facts, source evidence, semantic search, revenue, churn, SQL analytics, setup, integrations, or troubleshooting agent access.
+description: Use when accessing Outlit customer intelligence through the `outlit` CLI, Outlit MCP tools, Pi tools, or @outlit/tools, including customer lookups, users, workspace users, timelines, facts, source evidence, semantic search, revenue, churn, SQL analytics, identity splits, merge suggestions, setup, integrations, or troubleshooting agent access.
 metadata:
   openclaw:
     homepage: "https://outlit.ai"
@@ -45,7 +45,7 @@ Use the highest-level interface already available:
 
 ## Quick Chooser
 
-Tool availability depends on the MCP server or Pi tool policy. If a named tool is absent, use the CLI or ask the user to enable the appropriate toolset.
+Tool availability depends on the MCP server or Pi tool policy. If a named tool is absent, use the CLI only where your policy permits, or ask the user to enable the appropriate toolset.
 
 | Need | Tool when exposed | CLI |
 |------|-------------------|-----|
@@ -59,14 +59,23 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 | Source enumeration and retrieval | `outlit_list_sources`, `outlit_get_source` | `outlit sources list/get` |
 | Thematic or fuzzy question | `outlit_search_customer_context` | `outlit search` |
 | Custom analytics | `outlit_schema`, then `outlit_query` | `outlit schema`, then `outlit sql` |
-| Customer ownership and access | `outlit_assign_customer_owner`, `outlit_grant_customer_access`, `outlit_update_customer_access`, `outlit_revoke_customer_access` | `outlit customers owner set/grant/revoke` |
-| Automation destinations | `outlit_list_destinations` and destination write tools | `outlit destinations list/get/create/update/enable/disable/archive` |
+| Customer ownership and access | `outlit_assign_customer_owner`, `outlit_grant_customer_access`, `outlit_update_customer_access`, `outlit_revoke_customer_access` | `outlit customers owner set`, `outlit customers grant/revoke` |
+| Browse automation destinations | `outlit_list_destinations`, `outlit_get_destination` | `outlit destinations list/get` |
+| Configure automation destinations | `outlit_create_destination`, `outlit_update_destination` | `outlit destinations create/update` |
+| Destination lifecycle | `outlit_enable_destination`, `outlit_disable_destination`, `outlit_archive_destination` | `outlit destinations enable/disable/archive` |
 | Integration readiness or setup | `outlit_get_integration_capabilities`, `outlit_begin_integration_setup`, `outlit_get_integration_setup_status`, `outlit_get_integration_status`, `outlit_setup_integration` | `outlit integrations setup/status` |
 | Activation setting | `outlit_get_customer_activation`, `outlit_preview_customer_activation`, `outlit_update_customer_activation` | `outlit activation get/preview/update/disable` |
 | Workspace timezone | `outlit_get_workspace_settings`, `outlit_update_workspace_settings` | `outlit settings get/update` |
 | Workspace Features | `outlit_list_features`, `outlit_create_feature`, `outlit_archive_feature` | `outlit features list/create/archive` |
 | Customer Feature usage | `outlit_get_customer_features` | `outlit customers features` |
 | Review current Attention items | `outlit_list_attention_items`, `outlit_get_attention_item` | `outlit attention list/get` |
+| Diagnose possible identity splits | `outlit_get_customer_identity` | `outlit customers identity <customerId>` |
+| Browse saved merge suggestions and history | `outlit_list_identity_merge_suggestions` | `outlit identity suggestions list` |
+| Reject a saved suggestion | `outlit_reject_identity_merge_suggestion` | `outlit identity suggestions reject <suggestionId>` |
+| Preview or execute a customer merge | `outlit_merge_customers` | `outlit customers merge <survivorId> <duplicateId>` |
+| Track a merge operation | `outlit_get_customer_merge_status` | `outlit customers merge-status <operationId>` |
+
+`outlit customers grant` also updates an existing collaborator's role; access commands are siblings of `owner`, not subcommands of it.
 
 Customer-associated users belong to customer accounts. Workspace users are internal Outlit members used for ownership and access actions. Do not substitute one ID type for the other.
 
@@ -79,7 +88,7 @@ Use customer lookups before SQL. SQL is for aggregates, cohorts, joins, time-ser
 - Cite the evidence kind: customer, user, workspace user, relationship item, timeline event, fact, search result, source, Attention item, Feature usage, or SQL result.
 - Say when data is sparse, stale, truncated, partial, or inconsistent and how that affects confidence.
 - Request only the fields or include sections needed.
-- Treat write operations as changes to the user's workspace. Assign owners, change access, configure integrations, or mutate destinations, activation, settings, and Features only when the user explicitly asks.
+- Treat write operations as changes to the user's workspace. Assign owners, change access, configure integrations, reject merge suggestions, merge customer records, or mutate destinations, activation, settings, and Features only when the user explicitly asks.
 - Do not treat integration `ready` status as proof that a sync or backfill finished or that customer data is current.
 
 ## Facts, Search, Sources, and Timeline
@@ -100,6 +109,16 @@ Use customer lookups before SQL. SQL is for aggregates, cohorts, joins, time-ser
 - Use `timeline` when order, recency, or sequence matters.
 
 Supported generic source types are `EMAIL`, `CALL`, `CALENDAR_EVENT`, `SUPPORT_TICKET`, `OPPORTUNITY`, and `SLACK`. `CRM` and `CRM_OPPORTUNITY` are accepted aliases for opportunity filters.
+
+## Identity and Customer Merges
+
+When calls or other communications exist but product usage is absent, use `outlit_get_customer_identity` for bounded split-record diagnosis alongside source readiness and usage checks. Candidates and shared participants are leads, not permission to combine evidence or proof of one company. Empty or incomplete identity results do not establish inactivity.
+
+Merging is dangerous and has no supported undo. Only execute when the user authorized it and the records are certainly the same customer. Similar names, related domains, shared participants, a suggested match, or parent/subsidiary relationships are insufficient. The merge command defaults to preview; execution requires explicit permission, the reviewed preview token, and a stable request ID. Any pair involving an `INDIVIDUAL` requires an eligible saved suggestion.
+
+Read [the identity and merge workflow](references/identity.md) before previewing, rejecting, executing, retrying, or tracking a merge. It includes the five tool contracts, CLI examples, and asynchronous status handling.
+
+Outlit-owned Churn and Renewal agents receive only the identity diagnostic for their assigned customer. Outlit-owned agents, including the Slack assistant acting for an admin, cannot reject suggestions or execute merges. Do not switch to CLI, API keys, or another identity to bypass an agent's tool policy or permissions. Customer-controlled agents may use the public tools within their granted authority.
 
 ## Authorization
 
@@ -122,6 +141,10 @@ Current write or setup grants are:
 - `activation:manage`
 - `workspace_settings:manage`
 - `customer_access:manage`
+- `customer_identity:review`
+- `customer_identity:merge`
+
+Identity diagnostics, saved suggestions, merge previews, and merge status require `customer_intelligence:read` for API keys. Rejection requires `customer_identity:review`; execution requires `customer_identity:merge`. The merge grant is excluded from Full workspace access and default presets; an admin must explicitly select it in a Custom key. OAuth MCP inherits the user's current permissions and record access.
 
 A valid key can still receive `403` when it lacks the required grant. Do not retry that failure. Ask a workspace admin to review the key under **Settings > API Keys**. Remote MCP OAuth uses the signed-in user's current workspace authorization instead of an Outlit API key.
 
@@ -224,7 +247,7 @@ Disconnect integrations through the Outlit web app. The CLI does not expose dest
 - Setup issues: run `outlit doctor --json` and `outlit integrations status [provider] --json`.
 - Stale CLI or missing current commands: run `outlit upgrade`.
 - MCP auth issues: use the workspace URL and OAuth flow. Do not assume remote MCP requires an API key.
-- Empty data: inspect integration readiness and data freshness before concluding that a customer has no activity.
+- Empty data: inspect integration readiness and data freshness before concluding that a customer has no activity. If communications and usage disagree, check identity coverage too.
 
 ## Docs
 
