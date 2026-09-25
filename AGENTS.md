@@ -16,6 +16,6 @@ The public skill packages under `skills/` describe Outlit product use. Developme
 
 Available skills in this repository:
 
-- **[skills/outlit/SKILL.md](skills/outlit/SKILL.md)** — Customer intelligence access through the Outlit CLI, MCP/Pi tools, SQL, source evidence, and integration setup. Use when querying customers, users, workspace users, timelines, facts, search, revenue, churn, or analytics.
+- **[skills/outlit/SKILL.md](skills/outlit/SKILL.md)** — Unified customer intelligence access through the Outlit CLI, MCP/Pi tools, tool packages, SQL, source evidence, and integration setup. Use when users need customer context, integrations, or analytics, including customer lookups, users, workspace users, timelines, facts, search, revenue, and churn.
 
-- **[skills/outlit-sdk/SKILL.md](skills/outlit-sdk/SKILL.md)** — Complete Outlit SDK integration guide covering browser, server, native, desktop, identity, consent, product activity, activation-event configuration, verified billing integrations, customerId attribution, and event tracking. Use when integrating Outlit tracking into applications.
+- **[skills/outlit-sdk/SKILL.md](skills/outlit-sdk/SKILL.md)** — Decision-tree-driven Outlit SDK integration guide covering web frameworks (React, Next.js, Vue, Nuxt, SvelteKit, Angular, Astro), server runtimes (Node.js, Express, Fastify), native JavaScript runtimes, desktop apps (Tauri, Electron), and Rust. Handles new installations, analytics migrations, identity, customerId attribution, consent, product activity, activation-event configuration, verified billing integrations, event tracking, and troubleshooting. Use when integrating Outlit identity and product activity tracking into applications.

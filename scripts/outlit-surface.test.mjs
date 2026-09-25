@@ -5,7 +5,7 @@ import { test } from "node:test";
 const skill = await readFile(new URL("../skills/outlit/SKILL.md", import.meta.url), "utf8");
 const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
 const catalogDocs = await Promise.all(
-  ["README.md", "CLAUDE.md", "AGENTS.md", "skills.sh.json"].map((path) =>
+  ["README.md", "AGENTS.md", "skills.sh.json"].map((path) =>
     readFile(new URL(`../${path}`, import.meta.url), "utf8"),
   ),
 );
@@ -110,7 +110,7 @@ test("OpenClaw metadata allows stored credentials and browser onboarding", () =>
 });
 
 test("repository docs use the current Skills repository name", () => {
-  for (const doc of catalogDocs.slice(0, 3)) {
+  for (const doc of catalogDocs.slice(0, 2)) {
     assert.doesNotMatch(doc, /^# Outlit Agent Skills$/m);
     assert.match(doc, /^# Outlit Skills$/m);
   }
