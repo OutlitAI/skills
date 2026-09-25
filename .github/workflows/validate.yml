@@ -41,7 +41,7 @@ jobs:
 
       - name: Check root entry points
         run: |
-          for f in CLAUDE.md AGENTS.md README.md LICENSE; do
+          for f in AGENTS.md README.md LICENSE; do
             if [ ! -f "$f" ]; then
               echo "ERROR: Missing $f"
               exit 1
