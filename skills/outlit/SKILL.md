@@ -251,17 +251,7 @@ Disconnect integrations through the Outlit web app. The CLI does not expose dest
 
 ## Docs
 
-- Docs home: https://docs.outlit.ai/
-- CLI overview: https://docs.outlit.ai/cli/overview
-- CLI commands: https://docs.outlit.ai/cli/commands
-- CLI integrations: https://docs.outlit.ai/cli/integrations
-- AI agent setup: https://docs.outlit.ai/cli/ai-agents
-- Agent skills: https://docs.outlit.ai/ai-integrations/skills
-- MCP integration: https://docs.outlit.ai/ai-integrations/mcp
-- Pi agents: https://docs.outlit.ai/ai-integrations/pi
-- Public tools API: https://docs.outlit.ai/api-reference/tools
-- API key validation: https://docs.outlit.ai/api-reference/validation
-- Customer context graph: https://docs.outlit.ai/concepts/customer-context-graph
+Start with the [documentation index](https://docs.outlit.ai/llms.txt), then read the relevant pages for your task. The [Outlit docs](https://docs.outlit.ai/) cover the product, CLI, MCP, API, and Outlit SDKs.
 
 ## Common Prompts
 
