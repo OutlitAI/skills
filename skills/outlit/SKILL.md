@@ -90,6 +90,7 @@ Use customer lookups before SQL. SQL is for aggregates, cohorts, joins, time-ser
 - Request only the fields or include sections needed.
 - Treat write operations as changes to the user's workspace. Assign owners, change access, configure integrations, reject merge suggestions, merge customer records, or mutate destinations, activation, settings, and Features only when the user explicitly asks.
 - Do not treat integration `ready` status as proof that a sync or backfill finished or that customer data is current.
+- When the user wants to share Outlit product feedback, use `outlit_submit_feedback` when available with `body` and optional `area`/`context`, or `outlit feedback --body "..." --json`. Feedback does not open a support ticket.
 
 ## Facts, Search, Sources, and Timeline
 
