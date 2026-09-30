@@ -68,7 +68,7 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 | Workspace timezone | `outlit_get_workspace_settings`, `outlit_update_workspace_settings` | `outlit settings get/update` |
 | Workspace Features | `outlit_list_features`, `outlit_create_feature`, `outlit_archive_feature` | `outlit features list/create/archive` |
 | Customer Feature usage | `outlit_get_customer_features` | `outlit customers features` |
-| Review current Attention items | `outlit_list_attention_items`, `outlit_get_attention_item` | `outlit attention list/get` |
+| Review churn cases in the Attention queue | `outlit_list_attention_items`, `outlit_get_attention_item` | `outlit attention list/get` |
 | Diagnose possible identity splits | `outlit_get_customer_identity` | `outlit customers identity <customerId>` |
 | Browse saved merge suggestions and history | `outlit_list_identity_merge_suggestions` | `outlit identity suggestions list` |
 | Reject a saved suggestion | `outlit_reject_identity_merge_suggestion` | `outlit identity suggestions reject <suggestionId>` |
@@ -80,6 +80,27 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 Customer-associated users belong to customer accounts. Workspace users are internal Outlit members used for ownership and access actions. Do not substitute one ID type for the other.
 
 Use customer lookups before SQL. SQL is for aggregates, cohorts, joins, time-series checks, and custom reporting.
+
+## Attention Items, Churn Cases, and Renewal Briefs
+
+In the Outlit app, the Attention queue collects the accounts that need someone's attention. It holds two kinds of item, and users use the words interchangeably:
+
+- **Churn cases**: accounts Outlit's Churn agent flagged for risk, each with evidence and intervention approaches. Users may call them "cases", "open cases", "churn risks" or "Attention items".
+- **Renewal items**: upcoming or overdue renewals with a renewal brief, shown when the workspace has Renewals enabled. Users may call them "renewal briefs", "renewals that need attention" or "Attention items".
+
+A churn case is an Attention item, and so is a renewal brief: in the app they are one queue. Outlit's tools expose only its churn cases, so keep that gap in mind whenever a user asks about Attention items.
+
+What the tools return:
+
+- `outlit_list_attention_items` and `outlit_get_attention_item` (`outlit attention list/get`) return the churn cases in the Attention queue. They do not return renewal items, and `outlit_get_attention_item` accepts a churn case ID, not a renewal ID.
+- No CLI command, MCP tool or Pi tool returns renewal items or renewal briefs.
+
+How to answer:
+
+- For churn cases, cases, churn risk or "Attention items", use the Attention tools and call the results churn cases.
+- When the list is empty, say there are no open churn cases, not that the Attention queue is empty: renewal items may still be waiting.
+- For renewal briefs, renewals needing attention or renewal readiness, say these are not available through Outlit's CLI, MCP or Pi tools, and point the user to the Attention page or the Renewals page in the Outlit app, or to the assistant inside the app. Do not reconstruct a renewal brief from facts, timelines or SQL.
+- For "what needs my attention", list the open churn cases and add that renewal items, if the workspace has Renewals enabled, are in the app's Attention queue.
 
 ## Working Rules
 
