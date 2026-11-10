@@ -69,7 +69,6 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 | Workspace Features | `outlit_list_features`, `outlit_create_feature`, `outlit_archive_feature` | `outlit features list/create/archive` |
 | Customer Feature usage and metered quantities | `outlit_get_customer` with `include: ["features", "meters"]` | `outlit customers get --include features,meters` |
 | Customer credit pools | `outlit_get_customer` with `include: ["credits"]` | `outlit customers get --include credits` |
-| Review current churn-risk cases | `outlit_list_cases`, `outlit_get_case` | `outlit attention list/get` |
 | Diagnose possible identity splits | `outlit_get_identity` | `outlit customers identity <customerId>` |
 | Browse saved merge suggestions and history | `outlit_list_merge_suggestions` | `outlit identity suggestions list` |
 | Reject a saved suggestion | `outlit_reject_merge_suggestion` | `outlit identity suggestions reject <suggestionId>` |
@@ -87,7 +86,7 @@ The earlier names `outlit_list_users`, `outlit_get_customer_relationship`, `outl
 
 The earlier admin names (`outlit_get_destination`, `outlit_enable_destination`, `outlit_disable_destination`, `outlit_assign_customer_owner`, `outlit_grant_customer_access`, `outlit_update_customer_access`, `outlit_revoke_customer_access`, `outlit_list_workspace_users`, the integration setup and status tools, the workspace settings and customer activation tools) also answer as aliases until 2026-12-11.
 
-The earlier work and identity names (`outlit_list_attention_items`, `outlit_get_attention_item`, `outlit_get_customer_identity`, `outlit_list_identity_merge_suggestions`, `outlit_reject_identity_merge_suggestion`, `outlit_get_customer_merge_status`) also answer as aliases until 2026-12-11.
+The earlier identity names (`outlit_get_customer_identity`, `outlit_list_identity_merge_suggestions`, `outlit_reject_identity_merge_suggestion`, `outlit_get_customer_merge_status`) also answer as aliases until 2026-12-11.
 
 Use customer lookups before SQL. SQL is for aggregates, cohorts, joins, time-series checks, and custom reporting.
 
@@ -95,7 +94,7 @@ Use customer lookups before SQL. SQL is for aggregates, cohorts, joins, time-ser
 
 - Start with the highest-level tool that can answer the question.
 - Gather evidence before drawing conclusions, and separate evidence from interpretation.
-- Cite the evidence kind: customer, user, workspace user, relationship item, timeline event, fact, search result, source, Attention item, Feature usage, or SQL result.
+- Cite the evidence kind: customer, user, workspace user, relationship item, timeline event, fact, search result, source, Feature usage, or SQL result.
 - Say when data is sparse, stale, truncated, partial, or inconsistent and how that affects confidence.
 - Request only the fields or include sections needed.
 - Treat write operations as changes to the user's workspace. Assign owners, change access, configure integrations, reject merge suggestions, merge customer records, or mutate destinations, activation, settings, and Features only when the user explicitly asks.

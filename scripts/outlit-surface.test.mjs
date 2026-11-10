@@ -36,7 +36,6 @@ test("Outlit chooser documents the current public capability families", () => {
     "outlit_get_settings",
     "outlit_update_settings",
     "outlit_list_features",
-    "outlit_list_cases",
     "outlit_get_identity",
     "outlit_list_merge_suggestions",
     "outlit_get_merge",
@@ -70,6 +69,10 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
   const retiredWorkIdentity =
     /`outlit_(?:list_attention_items|get_attention_item|get_customer_identity|list_identity_merge_suggestions|reject_identity_merge_suggestion|get_customer_merge_status)`/;
   for (const row of tableRows) assert.doesNotMatch(row, retiredWorkIdentity);
+  // The churn case tools are hidden from external agents until a case becomes one kind of plan.
+  for (const doc of [skill, readFileSync(new URL("../skills/outlit/references/identity.md", import.meta.url), "utf8")]) {
+    assert.doesNotMatch(doc, /\boutlit_(?:list_cases|get_case|list_attention_items|get_attention_item)\b|outlit attention/);
+  }
 
   const identityReference = readFileSync(
     new URL("../skills/outlit/references/identity.md", import.meta.url),
