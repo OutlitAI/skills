@@ -70,6 +70,15 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
   const retiredWorkIdentity =
     /`outlit_(?:list_attention_items|get_attention_item|get_customer_identity|list_identity_merge_suggestions|reject_identity_merge_suggestion|get_customer_merge_status)`/;
   for (const row of tableRows) assert.doesNotMatch(row, retiredWorkIdentity);
+
+  const identityReference = readFileSync(
+    new URL("../skills/outlit/references/identity.md", import.meta.url),
+    "utf8",
+  );
+  for (const toolName of ["outlit_get_identity", "outlit_list_merge_suggestions", "outlit_reject_merge_suggestion", "outlit_get_merge"]) {
+    assert.match(identityReference, new RegExp(`\\b${toolName}\\b`));
+  }
+  assert.doesNotMatch(identityReference, /`(?:survivingCustomerId|duplicateCustomerId|dryRun|reviewNotes|nextCursor)`/);
   assert.doesNotMatch(sqlReference, /`outlit_schema`\s+or/);
 
   for (const doc of [skill, sqlReference]) {
