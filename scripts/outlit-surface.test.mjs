@@ -47,7 +47,7 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
     "utf8",
   );
 
-  assert.match(skill, /\| Browse people at customers \| `outlit_list_people` \| `outlit people list` \|/);
+  assert.match(skill, /\| Browse customer-associated users \| `outlit_list_people` \| `outlit people list` \|/);
   assert.match(skill, /`outlit_get_customer` with `include: \["relationship"\]`/);
   assert.match(skill, /`include: \["features", "meters"\]`/);
   assert.match(skill, /`include: \["credits"\]`/);

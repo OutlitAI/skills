@@ -50,7 +50,7 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 | Need | Tool when exposed | CLI |
 |------|-------------------|-----|
 | Browse customers | `outlit_list_customers` | `outlit customers list` |
-| Browse people at customers | `outlit_list_people` | `outlit people list` |
+| Browse customer-associated users | `outlit_list_people` | `outlit people list` |
 | Browse workspace users | `outlit_list_workspace_users` | `outlit ws-users list` |
 | Single account profile | `outlit_get_customer` | `outlit customers get` |
 | Current customer relationship | `outlit_get_customer` with `include: ["relationship"]` | `outlit customers get --include relationship` |
@@ -79,7 +79,7 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 
 `outlit customers grant` also updates an existing collaborator's role; access commands are siblings of `owner`, not subcommands of it.
 
-People belong to customer accounts. Workspace users are internal Outlit members used for ownership and access actions. Do not substitute one ID type for the other.
+Customer-associated users belong to customer accounts. Workspace users are internal Outlit members used for ownership and access actions. Do not substitute one ID type for the other.
 
 Find the fields customers can be filtered on (CRM and support tool account fields, SDK traits) with `outlit_list_customer_fields`.
 
