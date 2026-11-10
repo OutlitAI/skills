@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 
@@ -19,13 +20,17 @@ test("Outlit skill says when agents should use it", () => {
 test("Outlit chooser documents the current public capability families", () => {
   for (const toolName of [
     "outlit_list_workspace_users",
-    "outlit_get_customer_relationship",
+    "outlit_list_people",
+    "outlit_get_customer",
+    "outlit_get_schema",
+    "outlit_list_toolsets",
+    "outlit_load_toolset",
+    "outlit_list_customer_fields",
     "outlit_list_destinations",
     "outlit_get_integration_capabilities",
     "outlit_get_customer_activation",
     "outlit_get_workspace_settings",
     "outlit_list_features",
-    "outlit_get_customer_features",
     "outlit_list_attention_items",
   ]) {
     assert.match(skill, new RegExp(`\\b${toolName}\\b`));
@@ -34,6 +39,33 @@ test("Outlit chooser documents the current public capability families", () => {
   assert.match(skill, /\| Browse workspace users \| `outlit_list_workspace_users` \| `outlit ws-users list` \|/);
   assert.match(skill, /deterministic enumeration of .*Slack/);
   assert.match(skill, /`SLACK`/);
+});
+
+test("Outlit skill names the Agent API v2 tools and SQL views, not the retired ones", () => {
+  const sqlReference = readFileSync(
+    new URL("../skills/outlit/references/sql-reference.md", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(skill, /\| Browse people at customers \| `outlit_list_people` \| `outlit people list` \|/);
+  assert.match(skill, /`outlit_get_customer` with `include: \["relationship"\]`/);
+  assert.match(skill, /`include: \["features", "meters"\]`/);
+  assert.match(skill, /`include: \["credits"\]`/);
+  assert.match(skill, /\?toolsets=core,work,meta/);
+
+  const retired = /`outlit_(?:list_users|get_customer_relationship|get_customer_features|get_customer_credits|list_crm_fields|schema)`/g;
+  const tableRows = skill.split("\n").filter((line) => line.startsWith("|"));
+  for (const row of tableRows) assert.doesNotMatch(row, retired);
+  assert.doesNotMatch(sqlReference, /`outlit_schema`\s+or/);
+
+  for (const doc of [skill, sqlReference]) {
+    assert.match(doc, /arr_amount/);
+    assert.doesNotMatch(doc, /\bmrr_cents, billing_status/);
+    assert.doesNotMatch(doc, /revenue and MRR reporting/);
+    assert.doesNotMatch(doc, /Divide (?:money fields in )?cents by `100`/);
+  }
+  assert.match(sqlReference, /`arr_decimals`/);
+  assert.match(sqlReference, /no `arr_history` view/);
 });
 
 test("Outlit integration guidance matches the current secure CLI", () => {
