@@ -36,7 +36,10 @@ test("Outlit chooser documents the current public capability families", () => {
     "outlit_get_settings",
     "outlit_update_settings",
     "outlit_list_features",
-    "outlit_list_attention_items",
+    "outlit_list_cases",
+    "outlit_get_identity",
+    "outlit_list_merge_suggestions",
+    "outlit_get_merge",
   ]) {
     assert.match(skill, new RegExp(`\\b${toolName}\\b`));
   }
@@ -64,6 +67,9 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
   const retiredAdmin =
     /`outlit_(?:get_destination|enable_destination|disable_destination|assign_customer_owner|grant_customer_access|update_customer_access|revoke_customer_access|list_workspace_users|get_integration_capabilities|begin_integration_setup|get_integration_setup_status|get_integration_status|get_workspace_settings|update_workspace_settings|get_customer_activation|preview_customer_activation|update_customer_activation)`/;
   for (const row of tableRows) assert.doesNotMatch(row, retiredAdmin);
+  const retiredWorkIdentity =
+    /`outlit_(?:list_attention_items|get_attention_item|get_customer_identity|list_identity_merge_suggestions|reject_identity_merge_suggestion|get_customer_merge_status)`/;
+  for (const row of tableRows) assert.doesNotMatch(row, retiredWorkIdentity);
   assert.doesNotMatch(sqlReference, /`outlit_schema`\s+or/);
 
   for (const doc of [skill, sqlReference]) {
