@@ -51,7 +51,7 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 |------|-------------------|-----|
 | Browse customers | `outlit_list_customers` | `outlit customers list` |
 | Browse customer-associated users | `outlit_list_people` | `outlit people list` |
-| Browse workspace users | `outlit_list_workspace_users` | `outlit ws-users list` |
+| Browse workspace users | `outlit_list_members` | `outlit ws-users list` |
 | Single account profile | `outlit_get_customer` | `outlit customers get` |
 | Current customer relationship | `outlit_get_customer` with `include: ["relationship"]` | `outlit customers get --include relationship` |
 | Chronology | `outlit_get_timeline` | `outlit customers timeline` |
@@ -59,13 +59,13 @@ Tool availability depends on the MCP server or Pi tool policy. If a named tool i
 | Source enumeration and retrieval | `outlit_list_sources`, `outlit_get_source` | `outlit sources list/get` |
 | Thematic or fuzzy question | `outlit_search_customer_context` | `outlit search` |
 | Custom analytics | `outlit_get_schema` (`topic`: `views`, `view`, `event_types`, `examples`), then `outlit_query` | `outlit schema`, then `outlit sql` |
-| Customer ownership and access | `outlit_assign_customer_owner`, `outlit_grant_customer_access`, `outlit_update_customer_access`, `outlit_revoke_customer_access` | `outlit customers owner set`, `outlit customers grant/revoke` |
-| Browse automation destinations | `outlit_list_destinations`, `outlit_get_destination` | `outlit destinations list/get` |
-| Configure automation destinations | `outlit_create_destination`, `outlit_update_destination` | `outlit destinations create/update` |
-| Destination lifecycle | `outlit_enable_destination`, `outlit_disable_destination`, `outlit_archive_destination` | `outlit destinations enable/disable/archive` |
-| Integration readiness or setup | `outlit_get_integration_capabilities`, `outlit_begin_integration_setup`, `outlit_get_integration_setup_status`, `outlit_get_integration_status`, `outlit_setup_integration` | `outlit integrations setup/status` |
-| Activation setting | `outlit_get_customer_activation`, `outlit_preview_customer_activation`, `outlit_update_customer_activation` | `outlit activation get/preview/update/disable` |
-| Workspace timezone | `outlit_get_workspace_settings`, `outlit_update_workspace_settings` | `outlit settings get/update` |
+| Customer ownership and access | `outlit_set_customer_owner`, `outlit_set_customer_access` | `outlit customers owner set`, `outlit customers grant/revoke` |
+| Browse automation destinations | `outlit_list_destinations` | `outlit destinations list/get` |
+| Configure automation destinations | `outlit_create_destination`, `outlit_update_destination` (including `enabled`) | `outlit destinations create/update/enable/disable` |
+| Archive a destination | `outlit_archive_destination` (preview, then confirm) | `outlit destinations archive` |
+| Integration readiness or setup | `outlit_list_integrations`, `outlit_setup_integration`, `outlit_get_setup_session` | `outlit integrations setup/status` |
+| Activation setting | `outlit_get_settings`, `outlit_preview_activation`, `outlit_update_settings` | `outlit activation get/preview/update/disable` |
+| Workspace timezone | `outlit_get_settings`, `outlit_update_settings` | `outlit settings get/update` |
 | Workspace Features | `outlit_list_features`, `outlit_create_feature`, `outlit_archive_feature` | `outlit features list/create/archive` |
 | Customer Feature usage and metered quantities | `outlit_get_customer` with `include: ["features", "meters"]` | `outlit customers get --include features,meters` |
 | Customer credit pools | `outlit_get_customer` with `include: ["credits"]` | `outlit customers get --include credits` |
@@ -84,6 +84,8 @@ Customer-associated users belong to customer accounts. Workspace users are inter
 Find the fields customers can be filtered on (CRM and support tool account fields, SDK traits) with `outlit_list_customer_fields`.
 
 The earlier names `outlit_list_users`, `outlit_get_customer_relationship`, `outlit_get_customer_features`, `outlit_get_customer_credits`, `outlit_list_crm_fields` and `outlit_schema` answer as aliases until 2026-12-11 and then return an error naming the new tool. Use the new names.
+
+The earlier admin names (`outlit_get_destination`, `outlit_enable_destination`, `outlit_disable_destination`, `outlit_assign_customer_owner`, `outlit_grant_customer_access`, `outlit_update_customer_access`, `outlit_revoke_customer_access`, `outlit_list_workspace_users`, the integration setup and status tools, the workspace settings and customer activation tools) also answer as aliases until 2026-12-11.
 
 Use customer lookups before SQL. SQL is for aggregates, cohorts, joins, time-series checks, and custom reporting.
 

@@ -19,7 +19,7 @@ test("Outlit skill says when agents should use it", () => {
 
 test("Outlit chooser documents the current public capability families", () => {
   for (const toolName of [
-    "outlit_list_workspace_users",
+    "outlit_list_members",
     "outlit_list_people",
     "outlit_get_customer",
     "outlit_get_schema",
@@ -27,16 +27,21 @@ test("Outlit chooser documents the current public capability families", () => {
     "outlit_load_toolset",
     "outlit_list_customer_fields",
     "outlit_list_destinations",
-    "outlit_get_integration_capabilities",
-    "outlit_get_customer_activation",
-    "outlit_get_workspace_settings",
+    "outlit_list_integrations",
+    "outlit_setup_integration",
+    "outlit_get_setup_session",
+    "outlit_preview_activation",
+    "outlit_set_customer_owner",
+    "outlit_set_customer_access",
+    "outlit_get_settings",
+    "outlit_update_settings",
     "outlit_list_features",
     "outlit_list_attention_items",
   ]) {
     assert.match(skill, new RegExp(`\\b${toolName}\\b`));
   }
 
-  assert.match(skill, /\| Browse workspace users \| `outlit_list_workspace_users` \| `outlit ws-users list` \|/);
+  assert.match(skill, /\| Browse workspace users \| `outlit_list_members` \| `outlit ws-users list` \|/);
   assert.match(skill, /deterministic enumeration of .*Slack/);
   assert.match(skill, /`SLACK`/);
 });
@@ -56,6 +61,9 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
   const retired = /`outlit_(?:list_users|get_customer_relationship|get_customer_features|get_customer_credits|list_crm_fields|schema)`/g;
   const tableRows = skill.split("\n").filter((line) => line.startsWith("|"));
   for (const row of tableRows) assert.doesNotMatch(row, retired);
+  const retiredAdmin =
+    /`outlit_(?:get_destination|enable_destination|disable_destination|assign_customer_owner|grant_customer_access|update_customer_access|revoke_customer_access|list_workspace_users|get_integration_capabilities|begin_integration_setup|get_integration_setup_status|get_integration_status|get_workspace_settings|update_workspace_settings|get_customer_activation|preview_customer_activation|update_customer_activation)`/;
+  for (const row of tableRows) assert.doesNotMatch(row, retiredAdmin);
   assert.doesNotMatch(sqlReference, /`outlit_schema`\s+or/);
 
   for (const doc of [skill, sqlReference]) {
