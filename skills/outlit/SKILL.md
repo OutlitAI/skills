@@ -40,7 +40,7 @@ Use the highest-level interface already available:
 2. Otherwise, if the `outlit` CLI is installed, use it.
 3. Otherwise, guide setup:
    - Coding agents: run `outlit onboard --agent <agent> --json`. Outside CI, it can start browser approval when no key is available, install this skill, validate access, and return next actions.
-   - Skills only: run `outlit setup --yes` or `outlit setup skills`.
+   - Skills only: run `outlit --skill` to print this skill with no install, or `outlit setup --yes` / `outlit setup skills` to install a stub that points at it.
    - MCP clients: use the workspace URL from **Settings > CLI & MCP** and complete OAuth in the client. Do not hardcode a shared endpoint, bearer header, or API key into remote MCP configuration.
 
 ## Quick Chooser
@@ -192,9 +192,9 @@ outlit auth whoami
 outlit doctor --json
 ```
 
-Plain `outlit auth login` automatically selects browser approval in a noninteractive agent shell outside CI. CI requires a key. `outlit setup --yes` and `outlit setup skills` install skills but do not configure MCP clients or integrations.
+Plain `outlit auth login` automatically selects browser approval in a noninteractive agent shell outside CI. CI requires a key. `outlit --skill` prints the current skill with no auth or network. `outlit setup --yes` and `outlit setup skills` install a stub skill that runs it, but do not configure MCP clients or integrations.
 
-If `onboard` is unavailable, run `outlit upgrade`, then use `outlit setup <agent>` or `outlit setup skills`.
+If `onboard` is unavailable, run `outlit upgrade`, then run `outlit --skill`, or use `outlit setup <agent>` / `outlit setup skills` to install the stub.
 
 ## CLI Output Behavior
 
