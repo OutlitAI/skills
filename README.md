@@ -4,11 +4,13 @@ Agent skills for working with [Outlit](https://outlit.ai).
 
 ## Installation
 
-With the Outlit CLI:
+The skill ships inside the Outlit CLI. Tell your agent to run:
 
 ```sh
-outlit setup skills
+outlit --skill
 ```
+
+It prints the full skill (no auth, no network) and always matches the installed CLI version. To install a small stub skill that points agents at it, run `outlit setup skills`.
 
 For a coding agent with the current CLI:
 
