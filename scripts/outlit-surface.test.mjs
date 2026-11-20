@@ -43,9 +43,9 @@ test("Outlit chooser documents the current public capability families", () => {
     assert.match(skill, new RegExp(`\\b${toolName}\\b`));
   }
 
-  assert.match(skill, /\| Browse workspace users \| `outlit_list_members` \| `outlit ws-users list` \|/);
+  assert.match(skill, /\| Browse workspace users \| `outlit_list_members` \| `outlit members list` \|/);
   assert.match(skill, /deterministic enumeration of .*Slack/);
-  assert.match(skill, /`SLACK`/);
+  assert.match(skill, /`slack`/);
 });
 
 test("Outlit skill names the Agent API v2 tools and SQL views, not the retired ones", () => {
@@ -96,64 +96,80 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
 
 test("Outlit integration guidance matches the current secure CLI", () => {
   assert.match(skill, /outlit integrations setup <provider>/);
-  assert.match(skill, /outlit integrations status \[provider\]/);
+  assert.match(skill, /outlit integrations list \[provider\]/);
+  assert.match(skill, /outlit setup-sessions get <id>/);
   assert.match(skill, /--config-stdin/);
   assert.match(skill, /--accept-recommended/);
   assert.match(skill, /Use `setup` to connect or repair/);
-  assert.match(skill, /use `status` to inspect readiness/);
+  assert.match(skill, /use `list` to inspect readiness/);
 
   for (const doc of [skill, readme]) {
     assert.doesNotMatch(doc, /outlit integrations capabilities/);
-    assert.doesNotMatch(doc, /outlit integrations list/);
+    assert.doesNotMatch(doc, /outlit integrations status/);
     assert.doesNotMatch(doc, /outlit integrations status --session/);
     assert.doesNotMatch(doc, /outlit integrations setup \S+ (?:mappings|webhooks)/);
     assert.doesNotMatch(doc, /--config(?:\s|=)/);
   }
 });
 
+test("Outlit docs use the CLI 5 command spellings", () => {
+  const docs = [
+    skill,
+    readme,
+    readFileSync(new URL("../skills/outlit/references/identity.md", import.meta.url), "utf8"),
+    readFileSync(new URL("../skills/outlit/references/sql-reference.md", import.meta.url), "utf8"),
+  ];
+  const stale =
+    /outlit (?:ws-users|users|sql\b|schema(?! get)|feedback(?! submit)|customers (?:timeline|identity|merge-status|owner|grant|revoke|relationship|features|credits)|identity suggestions|activation (?:get|update|disable)|integrations status|destinations (?:get|enable|disable))|--request-id|--review-notes|--customer-id|--execute\b/;
+  for (const doc of docs) assert.doesNotMatch(doc, stale);
+});
+
 test("Outlit facts guidance covers current public fact filters and contact transitions", () => {
   const factTypesLine = skill
     .split("\n")
-    .find((line) => line.startsWith("- Public `factTypes` filters accept"));
+    .find((line) => line.startsWith("- Public fact type filters (`filters.types`; CLI `--fact-types`) accept"));
   const factCategoriesLine = skill
     .split("\n")
-    .find((line) => line.startsWith("- Public `factCategories` filters accept"));
+    .find((line) => line.startsWith("- Public fact category filters (`filters.categories`; CLI `--fact-categories`) accept"));
 
   assert.ok(factTypesLine, "missing public factTypes filter list");
   assert.ok(factCategoriesLine, "missing public factCategories filter list");
 
   for (const factType of [
-    "CUSTOM",
-    "COMPANY_CHANGE",
-    "FUNDING_REVENUE",
-    "TECHNOLOGY",
-    "STRATEGY",
-    "COMPETITIVE",
-    "SENTIMENT",
-    "CHAMPION_RISK",
-    "EXPANSION",
-    "CHURN_RISK",
-    "TIMELINE",
-    "BUDGET",
-    "DECISION_MAKER",
-    "REQUIREMENTS",
-    "PRODUCT_USAGE",
-    "CONTACT_INFO",
-    "CONTACT_PREFERENCE",
-    "CONTACT_DEPARTURE",
-    "CONTACT_POSITION_CHANGE",
-    "CONTACT_DISENGAGEMENT",
+    "custom",
+    "company_change",
+    "funding_revenue",
+    "technology",
+    "strategy",
+    "competitive",
+    "sentiment",
+    "champion_risk",
+    "expansion",
+    "churn_risk",
+    "timeline",
+    "budget",
+    "decision_maker",
+    "requirements",
+    "blocker",
+    "commitment",
+    "success_criterion",
+    "product_usage",
+    "contact_info",
+    "contact_preference",
+    "contact_departure",
+    "contact_position_change",
+    "contact_disengagement",
   ]) {
-    assert.match(factTypesLine, new RegExp(`\\b${factType}\\b`));
+    assert.match(factTypesLine, new RegExp(`\`${factType}\``));
   }
 
-  assert.match(factCategoriesLine, /`MEMORY`, `RELATIONSHIP`, and `CUSTOM`/);
+  assert.match(factCategoriesLine, /`memory`, `relationship`, and `custom`/);
   assert.match(skill, /left or is leaving/);
   assert.match(skill, /title, department, team, or professional responsibility/);
   assert.match(skill, /stopped participating, organizing, responding, or owning/);
   assert.match(skill, /single unanswered message.*insufficient/);
-  assert.match(skill, /`CONTACT_DISENGAGEMENT`.*does not currently wake Churn/);
-  assert.match(skill, /`CHAMPION_RISK`.*historical.*readable/i);
+  assert.match(skill, /`contact_disengagement`.*does not currently wake Churn/);
+  assert.match(skill, /`champion_risk`.*historical.*readable/);
 });
 
 test("Outlit authorization guidance includes the onboarding key preset", () => {
