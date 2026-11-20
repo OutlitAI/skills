@@ -1,12 +1,12 @@
 # SQL Reference
 
-Use this when writing or debugging `outlit_query` / `outlit sql` queries.
+Use this when writing or debugging `outlit_query` / `outlit query` queries.
 
-Always inspect schema first with `outlit_get_schema` (`topic`: `views`, `view`, `event_types`, `examples`) or `outlit schema`. The earlier name `outlit_schema` works as an alias until 2026-12-11.
+Always inspect schema first with `outlit_get_schema` (`topic`: `views`, `view`, `event_types`, `examples`) or `outlit schema get`. The earlier name `outlit_schema` works as an alias until 2026-12-11.
 
 ## Tables
 
-Use the public analytics views exposed by `outlit schema`, not backend table names:
+Use the public analytics views exposed by `outlit schema get`, not backend table names:
 
 - `activity`: product, communication, support, CRM, and other customer activity
 - `customers`: customer/account attributes, billing status, and revenue fields (`arr_amount`, `arr_currency`, `arr_decimals`; `arr_cents`, `mrr_cents` and `mrr_status` are deprecated until 2026-12-11, use `arr_amount`)
