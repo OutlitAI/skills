@@ -4,6 +4,11 @@ import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 
 const skill = await readFile(new URL("../skills/outlit/SKILL.md", import.meta.url), "utf8");
+const setupReference = readFileSync(
+  new URL("../skills/outlit/references/setup-and-admin.md", import.meta.url),
+  "utf8",
+);
+const skillAndSetup = `${skill}\n${setupReference}`;
 const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
 const catalogDocs = await Promise.all(
   ["README.md", "AGENTS.md", "skills.sh.json"].map((path) =>
@@ -15,6 +20,18 @@ test("Outlit skill says when agents should use it", () => {
   assert.match(skill, /^## When to Use Outlit$/m);
   assert.match(skill, /onboarding, adoption, retention, renewal, or expansion/);
   assert.match(skill, /Use the `outlit-sdk` skill instead/);
+});
+
+test("Outlit skill leads with question-answering guidance", () => {
+  const answering = skill.indexOf("## Answer Customer Questions");
+  const setup = skill.indexOf("## Setup, Administration, and Writes");
+  assert.ok(answering > -1, "missing answering guide");
+  assert.ok(setup > answering, "setup and writes should come after the answering guide");
+  assert.match(skill, /no blanket "SQL last"/);
+  assert.doesNotMatch(skill, /Use SQL \(outlit_query\) last|SQL is for aggregates, cohorts/);
+  assert.match(skill, /Retrieved invoices, balances, fact assertions, timeline events, search excerpts, and SQL rows are evidence/);
+  assert.match(skill, /Do not open or page every source merely to create citations/);
+  assert.match(skill, /only when it changes the answer/);
 });
 
 test("Outlit chooser documents the current public capability families", () => {
@@ -40,12 +57,12 @@ test("Outlit chooser documents the current public capability families", () => {
     "outlit_list_merge_suggestions",
     "outlit_get_merge",
   ]) {
-    assert.match(skill, new RegExp(`\\b${toolName}\\b`));
+    assert.match(skillAndSetup, new RegExp(`\\b${toolName}\\b`));
   }
 
-  assert.match(skill, /\| Browse workspace users \| `outlit_list_members` \| `outlit members list` \|/);
-  assert.match(skill, /deterministic enumeration of .*Slack/);
-  assert.match(skill, /`slack`/);
+  assert.match(setupReference, /\| Browse workspace members \| `outlit_list_members` \| `outlit members list` \|/);
+  assert.match(skillAndSetup, /[Dd]eterministic enumeration of records/);
+  assert.match(skillAndSetup, /`slack`/);
 });
 
 test("Outlit skill names the Agent API v2 tools and SQL views, not the retired ones", () => {
@@ -54,14 +71,14 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
     "utf8",
   );
 
-  assert.match(skill, /\| Browse customer-associated users \| `outlit_list_people` \| `outlit people list` \|/);
-  assert.match(skill, /`outlit_get_customer` with `include: \["relationship"\]`/);
-  assert.match(skill, /`include: \["features", "meters"\]`/);
-  assert.match(skill, /`include: \["credits"\]`/);
-  assert.match(skill, /\?toolsets=core,work,meta/);
+  assert.match(setupReference, /\| Browse customer-associated people \| `outlit_list_people` \| `outlit people list` \|/);
+  assert.match(skill, /`relationship` for the compiled standing/);
+  assert.match(setupReference, /`include: \["features", "meters"\]`/);
+  assert.match(setupReference, /`include: \["credits"\]`/);
+  assert.match(setupReference, /\?toolsets=core,work,meta/);
 
   const retired = /`outlit_(?:list_users|get_customer_relationship|get_customer_features|get_customer_credits|list_crm_fields|schema)`/g;
-  const tableRows = skill.split("\n").filter((line) => line.startsWith("|"));
+  const tableRows = skillAndSetup.split("\n").filter((line) => line.startsWith("|"));
   for (const row of tableRows) assert.doesNotMatch(row, retired);
   const retiredAdmin =
     /`outlit_(?:get_destination|enable_destination|disable_destination|assign_customer_owner|grant_customer_access|update_customer_access|revoke_customer_access|list_workspace_users|get_integration_capabilities|begin_integration_setup|get_integration_setup_status|get_integration_status|get_workspace_settings|update_workspace_settings|get_customer_activation|preview_customer_activation|update_customer_activation)`/;
@@ -95,15 +112,15 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
 });
 
 test("Outlit integration guidance matches the current secure CLI", () => {
-  assert.match(skill, /outlit integrations setup <provider>/);
-  assert.match(skill, /outlit integrations list \[provider\]/);
-  assert.match(skill, /outlit setup-sessions get <id>/);
-  assert.match(skill, /--config-stdin/);
-  assert.match(skill, /--accept-recommended/);
-  assert.match(skill, /Use `setup` to connect or repair/);
-  assert.match(skill, /use `list` to inspect readiness/);
+  assert.match(setupReference, /outlit integrations setup <provider>/);
+  assert.match(setupReference, /outlit integrations list \[provider\]/);
+  assert.match(setupReference, /outlit setup-sessions get <id>/);
+  assert.match(setupReference, /--config-stdin/);
+  assert.match(setupReference, /--accept-recommended/);
+  assert.match(setupReference, /Use `setup` to connect or repair/);
+  assert.match(setupReference, /use `list` to inspect readiness/);
 
-  for (const doc of [skill, readme]) {
+  for (const doc of [skill, setupReference, readme]) {
     assert.doesNotMatch(doc, /outlit integrations capabilities/);
     assert.doesNotMatch(doc, /outlit integrations status/);
     assert.doesNotMatch(doc, /outlit integrations status --session/);
@@ -118,6 +135,7 @@ test("Outlit docs use the CLI 5 command spellings", () => {
     readme,
     readFileSync(new URL("../skills/outlit/references/identity.md", import.meta.url), "utf8"),
     readFileSync(new URL("../skills/outlit/references/sql-reference.md", import.meta.url), "utf8"),
+    setupReference,
   ];
   const stale =
     /outlit (?:ws-users|users|sql\b|schema(?! get)|feedback(?! submit)|customers (?:timeline|identity|merge-status|owner|grant|revoke|relationship|features|credits)|identity suggestions|activation (?:get|update|disable)|integrations status|destinations (?:get|enable|disable))|--request-id|--review-notes|--customer-id|--execute\b/;
@@ -173,8 +191,9 @@ test("Outlit facts guidance covers current public fact filters and contact trans
 });
 
 test("Outlit authorization guidance includes the onboarding key preset", () => {
-  assert.match(skill, /Personal CLI/);
-  assert.match(skill, /creator-bound integration setup/);
+  assert.match(setupReference, /Personal CLI/);
+  assert.match(setupReference, /Read and write/);
+  assert.match(setupReference, /creator-owned integration setup/);
 });
 
 test("OpenClaw metadata allows stored credentials and browser onboarding", () => {
@@ -219,6 +238,6 @@ test("Outlit docs reference the current @outlit/tools public exports", () => {
     "allPublicToolNames",
     "sqlToolNames",
   ]) {
-    assert.match(skill, new RegExp(`\\b${exportName}\\b`));
+    assert.match(setupReference, new RegExp(`\\b${exportName}\\b`));
   }
 });
