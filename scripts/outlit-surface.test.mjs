@@ -35,7 +35,7 @@ test("Outlit skill leads with question-answering guidance", () => {
   for (const text of [
     'include: ["support"]',
     'include: ["usage", "behaviorMetrics"]',
-    'include: ["identity"]',
+    'include: ["identity", "links"]',
     'include: ["billing"]',
     'receivables',
     'activePeople',
@@ -43,13 +43,16 @@ test("Outlit skill leads with question-answering guidance", () => {
     'mergedFrom',
     'secondaryDomains',
     'resolvedFrom',
-    'productId',
-    'billingCountry',
-    'includeAttachments',
-    'attachmentPage',
   ]) {
     assert.ok(skill.includes(text), `missing ${text}`);
   }
+  assert.match(skill, /shared-domain, contact, billing, and identity-proposal checks were made and what was not checked/);
+  assert.match(skill, /`windowStart`\/`windowEnd` and the section `asOf`/);
+  assert.match(skill, /null or unreadable `receivables` as unknown or partial—not zero/);
+  assert.match(skill, /`productId` is the billing provider product id, not proof of the SKU/);
+  assert.match(skill, /`billingCountry` is the billing-address country, not proof of the customer's location/);
+  assert.match(skill, /unchanged except `attachmentPage\.page`, preserving `source\.attachmentPage\.revision`/);
+  assert.match(skill, /check `coverage\.status` and narrow the window when recency matters/);
 });
 
 test("Outlit chooser documents the current public capability families", () => {
