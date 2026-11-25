@@ -41,7 +41,7 @@ Read-tool CLI equivalents are in `../SKILL.md`; this table covers administration
 
 Customer-associated people belong to customer accounts. Workspace members are internal Outlit users used for ownership and access actions. Do not substitute one ID type for the other.
 
-The task tools read a person's own Attention Inbox. List and read work with OAuth or a personal key with customer read access; acting and undoing require a signed-in person through OAuth. A workspace API key has no task list. Acting on or undoing a task is a write: do it only when the user asks.
+The task tools read a person's own Attention Inbox. List and read work with OAuth or a personal key with customer read access; acting and undoing require a signed-in person through OAuth. A workspace API key has no task list. Acting on or undoing a task is a write: do it only when the user asks. Admins can pass `filters.owner` with a teammate's member ID to list that teammate's `today` or `open` tasks.
 
 Retired tool names may answer as aliases during their published compatibility windows. Use the current names in this guide. Aliases ending 2026-12-11 include `outlit_list_users`, `outlit_get_customer_relationship`, `outlit_get_customer_features`, `outlit_get_customer_credits`, `outlit_list_crm_fields`, `outlit_schema`, the renamed admin/identity tools, and earlier CLI spellings; CLI aliases print `Renamed: use …` to stderr.
 

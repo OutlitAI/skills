@@ -34,7 +34,7 @@ Do not call Outlit for generic customer-success advice that does not need worksp
 
 ## Answer Customer Questions
 
-Choose the tool whose result carries the answer. There is no blanket "SQL last" or "curated tools first" order: SQL is the first tool when the question needs aggregation, grouping, a custom calculation, or a field the public SQL views carry and the other tools do not. Simple comparisons or rankings over fields the customer tools return can use `outlit_get_customer` or `outlit_list_customers` only when the tool supports the needed sort, filter, and currency handling—for example current credit balances, or top accounts by ARR when `arr` sorting and currency fit the question. Otherwise use SQL when the public views carry the data and can express the calculation, not SQL merely because multiple customers are involved.
+Choose the tool whose result carries the answer. There is no blanket "SQL last" or "curated tools first" order: SQL is the first tool when the question needs aggregation, grouping, a custom calculation, or a field the public SQL views carry and the other tools do not. Simple comparisons or rankings over fields the customer tools return can use `outlit_get_customer` or `outlit_list_customers` only when the tool supports the needed sort, filter, and currency handling. Rank ARR within one currency—filter to one currency or rank each currency separately—and never rank across currencies without conversion. When `outlit_list_customers` cannot sort or filter what is asked, use SQL if the public views carry the data and can express the calculation. State which path and currency scope you used.
 
 | Question | Tool | CLI equivalent |
 |----------|------|----------------|

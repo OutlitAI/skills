@@ -39,13 +39,13 @@ Use ClickHouse syntax, not MySQL or Postgres helpers like `DATE_SUB()`.
 - Prefer specific columns over `SELECT *`; avoid selecting large JSON unless needed.
 - Money is in minor units: divide `arr_amount` by `10^arr_decimals` for display, and keep currencies apart (filter or group by `arr_currency`). Never add amounts across currencies.
 - A JOIN from customers to activity or users multiplies rows. Use `IN`/`EXISTS`, or aggregate the many-row side first.
-- Send `page.nextCursor` with the identical SQL to read the next page of the frozen result.
+- Send `page.nextCursor` with the identical SQL to read the next page of the frozen result. On a large export, check `truncation`; if present, partition the export with narrower filters or time windows, or aggregate in SQL instead of trying to read past the retained-result cap.
 
 ## Use SQL for
 
 - Counts, sums, ratios, cohorts, time series, and rankings that need aggregation or fields unavailable in the customer tools.
 - Cross-customer aggregations or custom reporting.
 - Event names, event properties, traits, custom windows, and other fields the curated tools do not carry.
-- Per-currency totals, including ARR and lifetime revenue.
+- Per-currency ARR totals. For one customer's lifetime revenue, use `outlit_get_customer` with `include: ["revenue"]`; it returns lifetime revenue with each amount's currency.
 
 For one customer's current ARR, subscriptions, renewal date, credits, meters, or relationship state, `outlit_get_customer` usually carries the answer with its provenance. Choose the tool that directly matches the question rather than applying a fixed ordering.
