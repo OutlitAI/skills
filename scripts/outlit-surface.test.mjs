@@ -32,6 +32,24 @@ test("Outlit skill leads with question-answering guidance", () => {
   assert.match(skill, /Retrieved invoices, balances, fact assertions, timeline events, search excerpts, and SQL rows are evidence/);
   assert.match(skill, /Do not open or page every source merely to create citations/);
   assert.match(skill, /only when it changes the answer/);
+  for (const text of [
+    'include: ["support"]',
+    'include: ["usage", "behaviorMetrics"]',
+    'include: ["identity"]',
+    'include: ["billing"]',
+    'receivables',
+    'activePeople',
+    'knownContacts',
+    'mergedFrom',
+    'secondaryDomains',
+    'resolvedFrom',
+    'productId',
+    'billingCountry',
+    'includeAttachments',
+    'attachmentPage',
+  ]) {
+    assert.ok(skill.includes(text), `missing ${text}`);
+  }
 });
 
 test("Outlit chooser documents the current public capability families", () => {
