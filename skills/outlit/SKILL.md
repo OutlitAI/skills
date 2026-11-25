@@ -34,7 +34,7 @@ Do not call Outlit for generic customer-success advice that does not need worksp
 
 ## Answer Customer Questions
 
-Choose the tool whose result carries the answer. There is no blanket "SQL last" or "curated tools first" order: SQL is the first tool when the question needs aggregation, grouping, a custom calculation, or a field the public SQL views carry and the other tools do not. Simple comparisons or rankings over fields the customer tools return can use `outlit_get_customer` or `outlit_list_customers` only when the tool supports the needed sort, filter, and currency handling. Rank ARR within one currency—filter to one currency or rank each currency separately—and never rank across currencies without conversion. When `outlit_list_customers` cannot sort or filter what is asked, use SQL if the public views carry the data and can express the calculation. State which path and currency scope you used.
+Choose the tool whose result carries the answer. There is no blanket "SQL last" or "curated tools first" order: SQL is the first tool when the question needs aggregation, grouping, a custom calculation, or a field the public SQL views carry and the other tools do not. Simple comparisons or rankings over fields the customer tools return can use `outlit_get_customer` or `outlit_list_customers` only when the tool supports the needed sort, filter, and currency handling. When `outlit_list_customers` cannot sort or filter what is asked, use SQL if the public views carry the data and can express the calculation.
 
 | Question | Tool | CLI equivalent |
 |----------|------|----------------|
@@ -48,6 +48,8 @@ Choose the tool whose result carries the answer. There is no blanket "SQL last" 
 | A specific record or exact quote | `outlit_get_source` with the complete source reference returned by another tool | `outlit sources get` |
 | Deterministic enumeration of records | `outlit_list_sources` with customer, type, participant, provider, and date filters; use it when enumeration itself is the question | `outlit sources list` |
 | Counts, totals, trends, cohorts, custom calculations, or fields SQL carries but the other tools do not | `outlit_get_schema` (`topic`: `views`, `view`, `event_types`, or `examples`), then `outlit_query` | `outlit schema get`, then `outlit query` |
+
+For ARR, rank within one currency: use `outlit_list_customers` with `orderBy: "arr"` and `filters.arr.currency` (CLI `outlit customers list --order-by arr --currency USD`), or rank each currency separately. Never rank across currencies without conversion. `outlit_list_customers` also returns `totals.arr`, the current ARR total of the matched customers, one amount per currency. If neither the customer tools nor SQL can rank the requested field, say plainly that Outlit cannot rank it and offer the closest result it can compute. State which path and currency scope you used.
 
 If an `outlit_*` tool is not exposed, use the CLI equivalent where your policy permits shell commands; do not use the CLI to bypass a tool policy or permission. If neither interface is available, ask the user to enable the needed toolset or complete setup.
 
