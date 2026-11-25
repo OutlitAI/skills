@@ -104,7 +104,7 @@ npm install -g @outlit/cli
 brew install outlitai/tap/outlit
 ```
 
-Credential resolution order is `OUTLIT_API_KEY`, then stored credentials.
+Credential resolution order is `--api-key`, `OUTLIT_API_KEY`, then stored credentials. `--api-key` exists for compatibility, but do not use it in agent or CI commands because command arguments can expose the key; inject `OUTLIT_API_KEY` from the environment or secret store instead.
 
 ```bash
 outlit onboard --agent <agent> --json
@@ -114,7 +114,7 @@ outlit auth whoami
 outlit doctor --json
 ```
 
-Use `outlit auth login --browser` for browser approval. For CI or another non-interactive environment, inject `OUTLIT_API_KEY` from the environment or secret store; do not pass an API key as a command argument. `outlit --skill` prints the current skill with no auth or network. `outlit setup --yes` and `outlit setup skills` install a stub skill that runs it, but do not configure MCP clients or integrations.
+Use `outlit auth login --browser` for browser approval. For CI or another non-interactive environment, inject `OUTLIT_API_KEY` from the environment or secret store. `outlit --skill` prints the current skill with no auth or network. `outlit setup --yes` and `outlit setup skills` install a stub skill that runs it, but do not configure MCP clients or integrations.
 
 If `onboard` is unavailable, run `outlit upgrade`, then run `outlit --skill`, or use `outlit setup <agent>` / `outlit setup skills` to install the stub.
 
