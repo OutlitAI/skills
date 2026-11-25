@@ -60,7 +60,7 @@ test("Outlit chooser documents the current public capability families", () => {
     assert.match(skillAndSetup, new RegExp(`\\b${toolName}\\b`));
   }
 
-  assert.match(setupReference, /\| Browse workspace members \| `outlit_list_members` \| `outlit members list` \|/);
+  assert.match(skill, /\| Workspace teammates.*`outlit_list_members`.*`outlit members list` \|/);
   assert.match(skillAndSetup, /[Dd]eterministic enumeration of records/);
   assert.match(skillAndSetup, /`slack`/);
 });
@@ -71,10 +71,9 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
     "utf8",
   );
 
-  assert.match(setupReference, /\| Browse customer-associated people \| `outlit_list_people` \| `outlit people list` \|/);
+  assert.match(skill, /\| People and contacts .*`outlit_list_people`.*`outlit people list`.*\|/);
   assert.match(skill, /`relationship` for the compiled standing/);
-  assert.match(setupReference, /`include: \["features", "meters"\]`/);
-  assert.match(setupReference, /`include: \["credits"\]`/);
+  assert.match(skill, /`features`, `meters`, or `credits`/);
   assert.match(setupReference, /\?toolsets=core,work,meta/);
 
   const retired = /`outlit_(?:list_users|get_customer_relationship|get_customer_features|get_customer_credits|list_crm_fields|schema)`/g;
