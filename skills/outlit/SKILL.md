@@ -34,7 +34,7 @@ Do not call Outlit for generic customer-success advice that does not need worksp
 
 ## Answer Customer Questions
 
-Choose the tool whose result carries the answer. There is no blanket "SQL last" or "curated tools first" order: SQL is the first tool when the question needs aggregation, grouping, a custom calculation, or a field the public SQL views carry and the other tools do not.
+Choose the tool whose result carries the answer. There is no blanket "SQL last" or "curated tools first" order: SQL is the first tool when the question needs aggregation, grouping, a custom calculation, or a field the public SQL views carry and the other tools do not. Simple comparisons or rankings over fields the customer tools return—such as current credit balances or top accounts by ARR—use `outlit_get_customer` or `outlit_list_customers` sorting, not SQL merely because multiple customers are involved.
 
 | Question | Tool | CLI equivalent |
 |----------|------|----------------|
@@ -58,7 +58,7 @@ For `outlit_get_customer`, omitting `include` returns the profile (name, domain,
 - Activity and people: `recentTimeline` for latest events; `users` for associated people; `enrichment` for company enrichment.
 - Product and company structure: `features`, `meters`, or `credits` for feature use, metered quantities, and credit pools; `links` for records in other systems; `hierarchy` for the CRM-recorded parent company and subsidiaries.
 
-A customer read by id may come back with status `provisional`: a company Outlit has seen (CRM, email domain, product analytics) but not confirmed as a customer, often a duplicate (see `openMergeTarget`) or a CRM-only record. Don't count it as a customer; if it has an `openMergeTarget`, treat its records as belonging to that customer, with a note.
+A customer read by id may come back with status `provisional`: a company Outlit has seen (CRM, email domain, product analytics) but not confirmed as a customer, often a duplicate or a CRM-only record. `openMergeTarget` is a lead, not confirmed identity. Don't count it as a customer or attribute its data to the merge target; keep the records separately attributed, say it may be a duplicate of that customer, and combine them only when identity is confirmed (a merged record, or confirmed in the identity tools).
 
 ### State the answer with its evidence
 
@@ -88,7 +88,7 @@ Call `outlit_get_schema` before writing SQL. The public views are `activity`, `c
 
 ## Setup, Administration, and Writes
 
-Answering customer questions is read-only. Interface setup, authentication, CLI and MCP configuration, Pi packages, authorization, integrations, customer ownership and access, destinations, workspace settings, Features, tasks, identity diagnosis, and customer merges are separate workspace-administration workflows. Read [references/setup-and-admin.md](references/setup-and-admin.md) for those workflows.
+Answering customer questions is read-only. Interface setup, authentication, CLI and MCP configuration, Pi packages, authorization, integrations, customer ownership and access, destinations, workspace settings, Features, tasks, identity diagnosis, and customer merges are separate workspace-administration workflows. Read the full setup/admin reference at <https://github.com/OutlitAI/skills/blob/main/skills/outlit/references/setup-and-admin.md> (packaged path `skills/outlit/references/setup-and-admin.md`) for those workflows.
 
 Use write tools only when the user explicitly asks. Writes take `idempotencyKey` (CLI `--idempotency-key`); a retry with the same key and input returns the first result. Customer merges are dangerous and permanent: read [references/identity.md](references/identity.md) before previewing, rejecting, executing, retrying, or tracking one.
 

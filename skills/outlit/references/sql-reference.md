@@ -43,7 +43,7 @@ Use ClickHouse syntax, not MySQL or Postgres helpers like `DATE_SUB()`.
 
 ## Use SQL for
 
-- Counts, sums, ratios, rankings, cohorts, and time series.
+- Counts, sums, ratios, cohorts, time series, and rankings that need aggregation or fields unavailable in the customer tools.
 - Cross-customer aggregations or custom reporting.
 - Event names, event properties, traits, custom windows, and other fields the curated tools do not carry.
 - Per-currency totals, including ARR and lifetime revenue.
