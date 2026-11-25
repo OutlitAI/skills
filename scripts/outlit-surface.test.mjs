@@ -128,6 +128,10 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
     assert.doesNotMatch(doc, /Divide (?:money fields in )?cents by `100`/);
   }
   assert.match(sqlReference, /`arr_decimals`/);
+  assert.match(sqlReference, /`subscription_mrr_cents`, `subscription_mrr_status`, `subscription_mrr_currency`/);
+  assert.match(sqlReference, /excluding usage and one-offs; it will not equal ARR ÷ 12/);
+  assert.match(skill, /per-currency subscription MRR \(live subscription items only; not ARR ÷ 12\)/);
+  assert.match(skill, /Use ARR for annual revenue/);
   assert.match(sqlReference, /no `arr_history` view/);
 });
 
