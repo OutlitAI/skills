@@ -56,6 +56,7 @@ For `outlit_get_customer`, omitting `include` returns the profile (name, domain,
 - Activity and people: `recentTimeline` for latest events; `users` for associated people; `enrichment` for company enrichment.
 - Product and company structure: `features`, `meters`, or `credits` for feature use, metered quantities, and credit pools; `links` for records in other systems; `hierarchy` for the CRM-recorded parent company and subsidiaries.
 
+A customer read by id may come back with status `provisional`: a company Outlit has seen (CRM, email domain, product analytics) but not confirmed as a customer, often a duplicate (see `openMergeTarget`) or a CRM-only record. Don't count it as a customer; if it has an `openMergeTarget`, treat its records as belonging to that customer, with a note.
 
 ### State the answer with its evidence
 
