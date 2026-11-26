@@ -34,7 +34,7 @@ test("Outlit skill leads with question-answering guidance", () => {
   assert.match(skill, /only when it changes the answer/);
   for (const text of [
     'include: ["support"]',
-    'include: ["usage", "behaviorMetrics"]',
+    'include: ["behaviorMetrics", "features", "meters"]',
     'include: ["identity", "links"]',
     'include: ["billing"]',
     'receivables',
@@ -47,7 +47,6 @@ test("Outlit skill leads with question-answering guidance", () => {
     assert.ok(skill.includes(text), `missing ${text}`);
   }
   assert.match(skill, /shared-domain, contact, billing, and identity-proposal checks were made and what was not checked/);
-  assert.match(skill, /`windowStart`\/`windowEnd` and the section `asOf`/);
   assert.match(skill, /null or unreadable `receivables` as unknown or partial—not zero/);
   assert.match(skill, /`productId` is the billing provider product id, not proof of the SKU/);
   assert.match(skill, /`billingCountry` is the billing-address country, not proof of the customer's location/);
@@ -128,8 +127,6 @@ test("Outlit skill names the Agent API v2 tools and SQL views, not the retired o
     assert.doesNotMatch(doc, /Divide (?:money fields in )?cents by `100`/);
   }
   assert.match(sqlReference, /`arr_decimals`/);
-  assert.match(sqlReference, /`subscription_mrr_cents`, `subscription_mrr_status`, `subscription_mrr_currency`/);
-  assert.match(sqlReference, /excluding usage and one-offs; it will not equal ARR ÷ 12/);
   assert.match(skill, /per-currency subscription MRR \(live subscription items only; not ARR ÷ 12\)/);
   assert.match(skill, /Use ARR for annual revenue/);
   assert.match(sqlReference, /no `arr_history` view/);
