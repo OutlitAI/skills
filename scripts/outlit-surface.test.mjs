@@ -33,6 +33,21 @@ test("Outlit skill leads with question-answering guidance", () => {
   assert.match(skill, /Do not open or page every source merely to create citations/);
   assert.match(skill, /only when it changes the answer/);
   for (const text of [
+    "don't hedge a supported conclusion",
+    'sort by the relevant date and take the newest',
+    'the newer source wins; cite both',
+    'call a partial period partial',
+    'report every one',
+    'opens, clicks, digests',
+    'compare ingestion time with `occurred_at`',
+    'Drop out-of-scope records before counting',
+    'before generalising about the group',
+    'check integrations, digests, and API activity',
+    'self-serve expansion shows in billed volume',
+  ]) {
+    assert.ok(skill.includes(text), `missing ${text}`);
+  }
+  for (const text of [
     'include: ["support"]',
     'include: ["behaviorMetrics", "features", "meters"]',
     'include: ["identity", "links"]',

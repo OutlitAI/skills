@@ -72,7 +72,17 @@ A customer read by id may come back with status `provisional`: a company Outlit 
 
 ### State the answer with its evidence
 
-- State findings plainly from the data already retrieved, including what each relevant requested section says even when it confirms the obvious. Retrieved invoices, balances, fact assertions, timeline events, search excerpts, and SQL rows are evidence.
+- State the conclusion the evidence supports plainly and give its evidence; don't hedge a supported conclusion. Retrieved invoices, balances, fact assertions, timeline events, search excerpts, and SQL rows are evidence. Include what each relevant requested section says even when it confirms the obvious.
+- For "most recent" or "latest," sort by the relevant date and take the newest.
+- When a customer's latest email or ticket contradicts an older CRM field, the newer source wins; cite both.
+- Name the timestamp you grouped or filtered by, and call a partial period partial.
+- When a section returns several items for what was asked, report every one.
+- Drop out-of-scope records before counting.
+- Read each customer in scope before generalising about the group.
+- Low logins alone don't mean low engagement: check integrations, digests, and API activity.
+- Contracted expansion shows in deals and paper; self-serve expansion shows in billed volume.
+- Read engagement and activity fields (opens, clicks, digests) when the question is about engagement.
+- If a record looks backfilled, compare ingestion time with `occurred_at` before calling something recent.
 - Cite compactly with the identifiers already returned: customer ID, fact ID, timeline event ID, source reference, or the SQL query and result. Do not open or page every source merely to create citations.
 - Open `outlit_get_source` when exact wording, full record fields, an attachment, or a conflict between records matters to the answer.
 - Say something is missing only after checking the tools that would hold it: the relevant customer includes for current state, facts or search for learned knowledge and mentions, timeline for events, sources for a concrete record, and SQL for aggregates or uncarried fields. Name the scope checked. If an empty or contradictory activity result drives an inactivity conclusion and data might be split across duplicate records, check `outlit_get_identity` / `outlit identity get` first; do not combine evidence across unconfirmed matches. When freshness is material, inspect the relevant integration connection status.
