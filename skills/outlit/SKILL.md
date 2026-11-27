@@ -81,7 +81,7 @@ A customer read by id may come back with status `provisional`: a company Outlit 
 - Drop out-of-scope records before counting.
 - Read each customer in scope before generalising about the group.
 - Low logins alone don't mean low engagement: check integrations, digests, and API activity.
-- The support section counts ticket messages only, so replies sent by email need the email or timeline sources.
+- The support section summarises support tickets only; replies sent by email need the email or timeline sources.
 - A CRM health or at-risk field is evidence: weigh it with billing and usage, and don't override it with a long contract term alone.
 - Contracted expansion shows in deals and paper; self-serve expansion shows in billed volume.
 - Read engagement and activity fields (opens, clicks, digests) when the question is about engagement.
