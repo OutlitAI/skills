@@ -45,7 +45,7 @@ test("Outlit skill leads with question-answering guidance", () => {
     'check integrations, digests, and API activity',
     'self-serve expansion shows in billed volume',
     'proceed on a reasonable stated assumption',
-    'support section counts ticket messages only',
+    'support section summarises support tickets only',
     'CRM health or at-risk field is evidence',
   ]) {
     assert.ok(skill.includes(text), `missing ${text}`);
