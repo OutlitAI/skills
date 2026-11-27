@@ -73,6 +73,7 @@ A customer read by id may come back with status `provisional`: a company Outlit 
 ### State the answer with its evidence
 
 - State the conclusion the evidence supports plainly and give its evidence; don't hedge a supported conclusion. Retrieved invoices, balances, fact assertions, timeline events, search excerpts, and SQL rows are evidence. Include what each relevant requested section says even when it confirms the obvious.
+- When the question is answerable, proceed on a reasonable stated assumption rather than stopping to ask the user, and say what you assumed.
 - For "most recent" or "latest," sort by the relevant date and take the newest.
 - When a customer's latest email or ticket contradicts an older CRM field, the newer source wins; cite both.
 - Name the timestamp you grouped or filtered by, and call a partial period partial.
@@ -80,6 +81,8 @@ A customer read by id may come back with status `provisional`: a company Outlit 
 - Drop out-of-scope records before counting.
 - Read each customer in scope before generalising about the group.
 - Low logins alone don't mean low engagement: check integrations, digests, and API activity.
+- The support section counts ticket messages only, so replies sent by email need the email or timeline sources.
+- A CRM health or at-risk field is evidence: weigh it with billing and usage, and don't override it with a long contract term alone.
 - Contracted expansion shows in deals and paper; self-serve expansion shows in billed volume.
 - Read engagement and activity fields (opens, clicks, digests) when the question is about engagement.
 - If a record looks backfilled, compare ingestion time with `occurred_at` before calling something recent.
