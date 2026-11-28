@@ -33,11 +33,11 @@ test("Outlit skill leads with question-answering guidance", () => {
   assert.match(skill, /Do not open or page every source merely to create citations/);
   assert.match(skill, /only when it changes the answer/);
   for (const text of [
-    "don't hedge a supported conclusion",
+    'State a conclusion as settled when a retrieved record settles it',
     'sort by the relevant date and take the newest',
     'the newer source wins; cite both',
     'call a partial period partial',
-    'report every one',
+    'report every one, or say why you set one aside',
     'opens, clicks, digests',
     'compare ingestion time with `occurred_at`',
     'Drop out-of-scope records before counting',
@@ -47,6 +47,9 @@ test("Outlit skill leads with question-answering guidance", () => {
     'proceed on a reasonable stated assumption',
     'support section summarises support tickets only',
     'CRM health or at-risk field is evidence',
+    'list every part the question asks for',
+    'read it rather than assume',
+    'widen the window or open the underlying records before concluding',
   ]) {
     assert.ok(skill.includes(text), `missing ${text}`);
   }
