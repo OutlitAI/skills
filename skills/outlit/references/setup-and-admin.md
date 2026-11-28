@@ -142,7 +142,7 @@ With no query parameter the connection lists every tool. For the slim list, add 
 
 ```bash
 pi install npm:@outlit/pi
-export OUTLIT_API_KEY=ok_your_api_key
+export OUTLIT_API_KEY=<outlit-api-key>
 pi
 ```
 
