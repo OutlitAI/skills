@@ -162,12 +162,18 @@ outlit setup-sessions get <id>
 
 Interactive `setup` negotiates capabilities first. It can securely prompt for a credential, open a validated browser handoff, or ask the user to confirm a CRM or Mixpanel mapping.
 
-Do not ask the user to paste provider secrets into chat. Do not put secrets in model-visible tool calls, command arguments, logs, shell history, or process listings. When automation must supply provider configuration, have the user run the command in a trusted local terminal and send one strict JSON object through stdin:
+Do not ask the user to paste provider secrets into chat. Do not put secrets in model-visible tool calls, command arguments, logs, shell history, or process listings. Prefer interactive setup's secure prompt when a person can run it. When automation must supply provider configuration, write one strict JSON object to a protected local file outside shell history, redirect stdin from that file, and delete it afterward:
 
 ```bash
-printf '%s\n' '{"credentials":{"apiKey":"<provider-api-key>"}}' \
-  | outlit integrations setup fireflies --config-stdin --json
+umask 077
+touch /tmp/outlit-provider-credentials.json
+# In a trusted editor, write this one JSON object to the file:
+# {"credentials":{"apiKey":"<provider-api-key>"}}
+outlit integrations setup fireflies --config-stdin --json < /tmp/outlit-provider-credentials.json
+rm /tmp/outlit-provider-credentials.json
 ```
+
+If the file already exists, use `chmod 600` before editing it. Never pass the secret JSON through `printf`, a heredoc, or a shell command line.
 
 Use `--accept-recommended` only to accept the exact CRM recommendation returned by the current setup response. Explicit mappings also go through `--config-stdin`.
 
